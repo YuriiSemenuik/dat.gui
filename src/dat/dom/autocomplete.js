@@ -11,7 +11,7 @@ function autocomplete(settings) {
     var keyUpEventName = mobileFirefox ? "input" : "keyup";
     var items = [];
     var inputValue = "";
-    var minLen = settings.minLength || 2;
+    var minLen = settings.minLength;
     var selected;
     var keypressCounter = 0;
     var debounceTimer;
@@ -211,6 +211,22 @@ function autocomplete(settings) {
             clear();
         }
     }
+
+    /**
+     * Event handler for focus event
+     */
+    function focus(ev) {
+        var val = input.value;
+        if (val.length === 0) {
+            settings.fetch(val, function (elements) {
+                items = elements;
+                inputValue = val;
+                selected = items.length > 0 ? items[0] : undefined;
+                update();
+            });
+        }
+    }
+
     /**
      * Automatically move scroll bar if selected item is not visible
      */
@@ -320,6 +336,7 @@ function autocomplete(settings) {
      */
     function destroy() {
         input.removeEventListener("keydown", keydown);
+        input.removeEventListener("focus", focus);
         input.removeEventListener(keyUpEventName, keyup);
         input.removeEventListener("blur", blur);
         window.removeEventListener("resize", resizeEventHandler);
@@ -330,6 +347,7 @@ function autocomplete(settings) {
         keypressCounter++;
     }
     // setup event handlers
+    input.addEventListener("focus", focus);
     input.addEventListener("keydown", keydown);
     input.addEventListener(keyUpEventName, keyup);
     input.addEventListener("blur", blur);
