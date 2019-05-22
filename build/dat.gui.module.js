@@ -1119,7 +1119,6 @@ var NumberControllerBox = function (_NumberController) {
     var _this2 = possibleConstructorReturn(this, (NumberControllerBox.__proto__ || Object.getPrototypeOf(NumberControllerBox)).call(this, object, property, params));
     _this2.__truncationSuspended = false;
     var _this = _this2;
-    var prevY = void 0;
     function onChange() {
       var attempted = parseFloat(_this.__input.value);
       if (!Common.isNaN(attempted)) {
@@ -1134,26 +1133,10 @@ var NumberControllerBox = function (_NumberController) {
     function onBlur() {
       onFinish();
     }
-    function onMouseDrag(e) {
-      var diff = prevY - e.clientY;
-      _this.setValue(_this.getValue() + diff * _this.__impliedStep);
-      prevY = e.clientY;
-    }
-    function onMouseUp() {
-      dom.unbind(window, 'mousemove', onMouseDrag);
-      dom.unbind(window, 'mouseup', onMouseUp);
-      onFinish();
-    }
-    function onMouseDown(e) {
-      dom.bind(window, 'mousemove', onMouseDrag);
-      dom.bind(window, 'mouseup', onMouseUp);
-      prevY = e.clientY;
-    }
     _this2.__input = document.createElement('input');
     _this2.__input.setAttribute('type', 'text');
     dom.bind(_this2.__input, 'change', onChange);
     dom.bind(_this2.__input, 'blur', onBlur);
-    dom.bind(_this2.__input, 'mousedown', onMouseDown);
     dom.bind(_this2.__input, 'keydown', function (e) {
       if (e.keyCode === 13) {
         _this.__truncationSuspended = true;

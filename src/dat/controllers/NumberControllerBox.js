@@ -42,12 +42,6 @@ class NumberControllerBox extends NumberController {
 
     const _this = this;
 
-    /**
-     * {Number} Previous mouse y position
-     * @ignore
-     */
-    let prevY;
-
     function onChange() {
       const attempted = parseFloat(_this.__input.value);
       if (!common.isNaN(attempted)) {
@@ -65,25 +59,6 @@ class NumberControllerBox extends NumberController {
       onFinish();
     }
 
-    function onMouseDrag(e) {
-      const diff = prevY - e.clientY;
-      _this.setValue(_this.getValue() + diff * _this.__impliedStep);
-
-      prevY = e.clientY;
-    }
-
-    function onMouseUp() {
-      dom.unbind(window, 'mousemove', onMouseDrag);
-      dom.unbind(window, 'mouseup', onMouseUp);
-      onFinish();
-    }
-
-    function onMouseDown(e) {
-      dom.bind(window, 'mousemove', onMouseDrag);
-      dom.bind(window, 'mouseup', onMouseUp);
-      prevY = e.clientY;
-    }
-
     this.__input = document.createElement('input');
     this.__input.setAttribute('type', 'text');
 
@@ -91,7 +66,6 @@ class NumberControllerBox extends NumberController {
 
     dom.bind(this.__input, 'change', onChange);
     dom.bind(this.__input, 'blur', onBlur);
-    dom.bind(this.__input, 'mousedown', onMouseDown);
     dom.bind(this.__input, 'keydown', function(e) {
       // When pressing enter, you can be as precise as you want.
       if (e.keyCode === 13) {
