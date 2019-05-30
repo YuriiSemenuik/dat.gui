@@ -554,6 +554,14 @@ common.extend(
       Editor.focus();
     },
 
+    closeExportWindow: function () {
+      SAVE_DIALOGUE.hide();
+    },
+
+    isExportWindowOpened: function () {
+      return SAVE_DIALOGUE && SAVE_DIALOGUE.isVisible();
+    },
+
     plugins: {
       autocomplete: autocomplete
     },
@@ -1303,11 +1311,11 @@ function addSaveMenu(gui) {
 
   const newConstructorTextArea = document.getElementById('dg-new-constructor');
 
-  dom.bind(newConstructorTextArea, 'keydown', function(e) {
-    if (e.metaKey && (e.which === 67 || e.keyCode === 67)) {
-      SAVE_DIALOGUE.hide();
-    }
-  });
+  // dom.bind(newConstructorTextArea, 'keydown', function(e) {
+  //   if (e.metaKey && (e.which === 67 || e.keyCode === 67)) {
+  //     SAVE_DIALOGUE.hide();
+  //   }
+  // });
 
   dom.bind(gears, 'click', function() {
     newConstructorTextArea.innerHTML = JSON.stringify(gui.getSaveObject(), undefined, 2);

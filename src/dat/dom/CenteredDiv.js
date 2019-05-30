@@ -24,8 +24,8 @@ class CenteredDiv {
       display: 'none',
       zIndex: '1000',
       opacity: 0,
-      WebkitTransition: 'opacity 0.2s linear',
-      transition: 'opacity 0.2s linear'
+      // WebkitTransition: 'opacity 0.2s linear',
+      // transition: 'opacity 0.2s linear'
     });
 
     dom.makeFullscreen(this.backgroundElement);
@@ -37,8 +37,8 @@ class CenteredDiv {
       display: 'none',
       zIndex: '1001',
       opacity: 0,
-      WebkitTransition: '-webkit-transform 0.2s ease-out, opacity 0.2s linear',
-      transition: 'transform 0.2s ease-out, opacity 0.2s linear'
+      // WebkitTransition: '-webkit-transform 0.2s ease-out, opacity 0.2s linear',
+      // transition: 'transform 0.2s ease-out, opacity 0.2s linear'
     });
 
 
@@ -59,15 +59,22 @@ class CenteredDiv {
     this.domElement.style.display = 'block';
     this.domElement.style.opacity = 0;
 //    this.domElement.style.top = '52%';
-    this.domElement.style.webkitTransform = 'scale(1.1)';
+//     this.domElement.style.webkitTransform = 'scale(1.1)';
 
     this.layout();
 
     common.defer(function() {
       _this.backgroundElement.style.opacity = 1;
       _this.domElement.style.opacity = 1;
-      _this.domElement.style.webkitTransform = 'scale(1)';
+      // _this.domElement.style.webkitTransform = 'scale(1)';
     });
+  }
+
+  /**
+   * @returns {boolean}
+   */
+  isVisible() {
+    return this.domElement.style.display === 'block';
   }
 
   /**
@@ -80,19 +87,20 @@ class CenteredDiv {
       _this.domElement.style.display = 'none';
       _this.backgroundElement.style.display = 'none';
 
-      dom.unbind(_this.domElement, 'webkitTransitionEnd', hide);
-      dom.unbind(_this.domElement, 'transitionend', hide);
-      dom.unbind(_this.domElement, 'oTransitionEnd', hide);
+      // dom.unbind(_this.domElement, 'webkitTransitionEnd', hide);
+      // dom.unbind(_this.domElement, 'transitionend', hide);
+      // dom.unbind(_this.domElement, 'oTransitionEnd', hide);
     };
 
-    dom.bind(this.domElement, 'webkitTransitionEnd', hide);
-    dom.bind(this.domElement, 'transitionend', hide);
-    dom.bind(this.domElement, 'oTransitionEnd', hide);
+    // dom.bind(this.domElement, 'webkitTransitionEnd', hide);
+    // dom.bind(this.domElement, 'transitionend', hide);
+    // dom.bind(this.domElement, 'oTransitionEnd', hide);
 
     this.backgroundElement.style.opacity = 0;
 //    this.domElement.style.top = '48%';
     this.domElement.style.opacity = 0;
-    this.domElement.style.webkitTransform = 'scale(1.1)';
+    // this.domElement.style.webkitTransform = 'scale(1.1)';
+    hide();
   }
 
   layout() {
