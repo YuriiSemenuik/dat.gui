@@ -1541,7 +1541,7 @@ var css = {
   }
 };
 
-var saveDialogContents = "<div id=\"dg-save\" class=\"dg dialogue\">\n\n  <span id=\"dg-title\"></span>\n\n  <div id=\"dg-new-editor\"></div>\n</div>";
+var saveDialogContents = "<div id=\"dg-save\" class=\"dg dialogue\">\n\n  <span>\n    <span id=\"dg-title\"></span>\n    <div style=\"position: absolute; right: 10px; top: 12px;\">\n      Show all attributes\n      <input type=\"checkbox\" id=\"show_all\" />\n    </div>\n  </span>\n\n  <div id=\"dg-new-editor\"></div>\n</div>";
 
 var ControllerFactory = function ControllerFactory(object, property) {
   var initialValue = object[property];
@@ -1953,6 +1953,7 @@ var SAVE_DIALOGUE = void 0;
 var autoPlaceVirgin = true;
 var Editor = void 0;
 var modalTitle = void 0;
+var modalCheckbox = void 0;
 var autoPlaceContainer = void 0;
 var hide = false;
 var hideableGuis = [];
@@ -2213,22 +2214,34 @@ Common.extend(GUI.prototype,
       factoryArgs: Array.prototype.slice.call(arguments, 2)
     });
   },
-  openExportWindow: function openExportWindow(title, content) {
+  openExportWindow: function openExportWindow(title, content, contentAll) {
     if (Common.isUndefined(SAVE_DIALOGUE)) {
       SAVE_DIALOGUE = new CenteredDiv();
       SAVE_DIALOGUE.domElement.innerHTML = saveDialogContents;
       modalTitle = document.getElementById('dg-title');
+      modalCheckbox = document.getElementById('show_all');
       var JsonMode = ace.require('ace/mode/json').Mode;
       Editor = ace.edit('dg-new-editor');
       Editor.setTheme('ace/theme/solarized_dark');
       Editor.session.setMode(new JsonMode());
       Editor.setReadOnly(true);
+      modalCheckbox.addEventListener('change', function (event) {
+        if (event.target.checked) {
+          Editor.setValue(JSON.stringify(contentAll, undefined, 2));
+        } else {
+          Editor.setValue(JSON.stringify(content, undefined, 2));
+        }
+      });
     }
     if (this.autoPlace) {
       setWidth(this, this.width);
     }
     modalTitle.innerHTML = title;
-    Editor.setValue(JSON.stringify(content, undefined, 2));
+    if (modalCheckbox.checked) {
+      Editor.setValue(JSON.stringify(contentAll, undefined, 2));
+    } else {
+      Editor.setValue(JSON.stringify(content, undefined, 2));
+    }
     SAVE_DIALOGUE.show();
     Editor.focus();
   },

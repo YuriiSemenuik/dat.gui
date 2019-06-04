@@ -57,6 +57,8 @@ let Editor;
 
 let modalTitle;
 
+let modalCheckbox;
+
 /** @ignore Fixed position div that auto place GUI's go inside */
 let autoPlaceContainer;
 
@@ -530,18 +532,27 @@ common.extend(
       );
     },
 
-    openExportWindow: function (title, content) {
+    openExportWindow: function (title, content, contentAll) {
       if (common.isUndefined(SAVE_DIALOGUE)) {
         SAVE_DIALOGUE = new CenteredDiv();
         SAVE_DIALOGUE.domElement.innerHTML = saveDialogueContents;
 
         modalTitle = document.getElementById('dg-title');
 
+        modalCheckbox = document.getElementById('show_all');
         const JsonMode = ace.require('ace/mode/json').Mode;
         Editor = ace.edit('dg-new-editor');
         Editor.setTheme('ace/theme/solarized_dark');
         Editor.session.setMode(new JsonMode());
         Editor.setReadOnly(true);
+
+        modalCheckbox.addEventListener('change', (event) => {
+          if (event.target.checked) {
+            Editor.setValue(JSON.stringify(contentAll, undefined, 2));
+          } else {
+            Editor.setValue(JSON.stringify(content, undefined, 2));
+          }
+        });
       }
 
       if (this.autoPlace) {
@@ -549,7 +560,13 @@ common.extend(
       }
 
       modalTitle.innerHTML = title;
-      Editor.setValue(JSON.stringify(content, undefined, 2));
+
+      if (modalCheckbox.checked) {
+        Editor.setValue(JSON.stringify(contentAll, undefined, 2));
+      } else {
+        Editor.setValue(JSON.stringify(content, undefined, 2));
+      }
+
       SAVE_DIALOGUE.show();
       Editor.focus();
     },
